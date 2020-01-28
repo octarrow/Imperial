@@ -21,8 +21,7 @@ public class WechatRouter: FederatedServiceRouter {
             "redirect_uri=\(escaped_callbackURL)&" +
             "response_type=code&" +
             "scope=\(scope.joined(separator: ","))&" +
-            "state=STATE&" +
-            "#wechat_redirect"
+            "state=STATE" + "#wechat_redirect"
             
     }
     
