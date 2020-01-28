@@ -15,9 +15,10 @@ public class WechatRouter: FederatedServiceRouter {
     }
     
     public func authURL(_ request: Request) throws -> String {
+        let escaped_callbackURL = self.callbackURL.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "unknown_callback"
         return "https://open.weixin.qq.com/connect/oauth2/authorize?" +
             "appid=\(self.tokens.clientID)&" +
-            "redirect_uri=\(self.callbackURL)&" +
+            "redirect_uri=\(escaped_callbackURL)&" +
             "response_type=code&" +
             "scope=\(scope.joined(separator: ","))&" +
             "state=STATE&" +
@@ -66,7 +67,7 @@ public class WechatRouter: FederatedServiceRouter {
             let session = try request.session()
             
             session.setAccessToken(accessToken)
-            try session.set("access_token_service", to: OAuthService.github)
+            try session.set("access_token_service", to: OAuthService.wechat)
             
             return try self.callbackCompletion(request, accessToken)
         }.flatMap(to: Response.self) { response in
